@@ -1,5 +1,5 @@
 import { trace } from "console";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 if (typeof window !== "undefined") {
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -9,6 +9,9 @@ function Chat({ text }) {
   const [animalInput, setAnimalInput] = useState("");
   const [result, setResult] = useState();
   const [prompt, setPrompt] = useState("");
+  const [chatBubbles, setChatBubbles] = useState<{ sender: "human" | "robot"; text: string }[]>([]);
+
+  useEffect(() => {}, []);
 
   function startChat() {
     let transcript = "";
@@ -87,6 +90,15 @@ function Chat({ text }) {
 
   return (
     <>
+      <div>
+        {chatBubbles.map((bubble, index) => {
+          return (
+            <p className={bubble.sender === "human" ? "human" : "robot"} key={index}>
+              {bubble.text}
+            </p>
+          );
+        })}
+      </div>
       <form onSubmit={onSubmit}>
         <input
           type="text"
@@ -95,11 +107,10 @@ function Chat({ text }) {
           value={animalInput}
           onChange={(e) => setAnimalInput(e.target.value)}
         />
-        <input type="submit" value="Chat" />
+        <input type="submit" value="SUBMIT FORM" />
         <p>{result}</p>
       </form>
-      <button onClick={startChat}>🎙️</button>
-      <p>{prompt}</p>
+      <button onClick={startChat}>START CHAT</button>
     </>
   );
 }

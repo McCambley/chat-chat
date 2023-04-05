@@ -1,10 +1,15 @@
+.main * {
+  outline: 1px solid light-grey;
+}
+
+
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 6rem;
-  min-height: 100vh;
+  height: calc(100vh - 12rem);
 }
 
 .description {
