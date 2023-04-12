@@ -1,5 +1,7 @@
 import { trace } from "console";
 import React, { useEffect, useState } from "react";
+import mockData from "../mockData.json";
+import styles from "@/styles/Home.module.css";
 
 if (typeof window !== "undefined") {
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -9,7 +11,8 @@ function Chat({ text }) {
   const [animalInput, setAnimalInput] = useState("");
   const [result, setResult] = useState();
   const [prompt, setPrompt] = useState("");
-  const [chatBubbles, setChatBubbles] = useState<{ sender: "human" | "robot"; text: string }[]>([]);
+  // const [chatBubbles, setChatBubbles] = useState<{ sender: "human" | "robot"; text: string }[]>([]);
+  const [chatBubbles, setChatBubbles] = useState<any>(mockData);
 
   useEffect(() => {}, []);
 
@@ -90,12 +93,12 @@ function Chat({ text }) {
 
   return (
     <>
-      <div>
+      <div className={styles.main}>
         {chatBubbles.map((bubble, index) => {
           return (
-            <p className={bubble.sender === "human" ? "human" : "robot"} key={index}>
-              {bubble.text}
-            </p>
+            <div className={styles.row} key={index}>
+              <p className={bubble.sender === "human" ? styles.human : styles.robot}>{bubble.text}</p>
+            </div>
           );
         })}
       </div>

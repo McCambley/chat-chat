@@ -1,0 +1,43 @@
+[
+    {
+      "sender": "robot",
+      "text": "Hello, how may I assist you today?"
+    },
+    {
+      "sender": "human",
+      "text": "I have a question about my account."
+    },
+    {
+      "sender": "robot",
+      "text": "Sure, I'm here to help. What's your question?"
+    },
+    {
+      "sender": "human",
+      "text": "I want to know my account balance."
+    },
+    {
+      "sender": "robot",
+      "text": "To check your balance, please provide your account number."
+    },
+    {
+      "sender": "human",
+      "text": "My account number is 123456789."
+    },
+    {
+      "sender": "robot",
+      "text": "Thank you. Your current balance is $500."
+    },
+    {
+      "sender": "human",
+      "text": "Great, thanks for your help."
+    },
+    {
+      "sender": "robot",
+      "text": "You're welcome. Is there anything else you need?"
+    },
+    {
+      "sender": "human",
+      "text": "No, that's all for now. Have a good day!"
+    }
+  ]
+  
