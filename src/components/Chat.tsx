@@ -1,7 +1,7 @@
-import { trace } from "console";
 import React, { useEffect, useState } from "react";
 import mockData from "../mockData.json";
 import styles from "@/styles/Home.module.css";
+import { BiMicrophone } from "react-icons/bi";
 
 if (typeof window !== "undefined") {
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -92,7 +92,7 @@ function Chat({ text }) {
   }
 
   return (
-    <>
+    <section className={styles.chat}>
       <div className={styles.main}>
         {chatBubbles.map((bubble, index) => {
           return (
@@ -103,18 +103,22 @@ function Chat({ text }) {
         })}
       </div>
       <form onSubmit={onSubmit}>
-        <input
+        {/* <input
           type="text"
           name="chat"
           placeholder="What's on your mind?"
           value={animalInput}
           onChange={(e) => setAnimalInput(e.target.value)}
-        />
-        <input type="submit" value="SUBMIT FORM" />
-        <p>{result}</p>
+        /> */}
+        {/* <input type="submit" value="SUBMIT FORM" /> */}
+        {/* <p>{result}</p> */}
       </form>
-      <button onClick={startChat}>START CHAT</button>
-    </>
+      <div className={styles.footer}>
+        <button className={styles.footer_button} onClick={startChat}>
+          <BiMicrophone />
+        </button>
+      </div>
+    </section>
   );
 }
 
