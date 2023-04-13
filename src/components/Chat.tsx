@@ -3,8 +3,8 @@ import mockData from "../mockData.json";
 import styles from "@/styles/Home.module.css";
 import { BiMicrophone } from "react-icons/bi";
 
-if (typeof window !== "undefined") {
-  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (typeof window !== "undefined" && "SpeechRecognition" in window) {
+  window.SpeechRecognition = window.SpeechRecognition;
 }
 
 function Chat({ text }) {
