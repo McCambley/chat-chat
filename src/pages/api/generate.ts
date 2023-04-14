@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
@@ -5,7 +6,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function generate(req, res) {
+export default async function generate(req: NextApiRequest, res: NextApiResponse) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -33,10 +34,8 @@ export default async function generate(req, res) {
       max_tokens: 100,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
-  } catch (error) {
-    // Consider adjusting the error handling logic for your use case
+  } catch (error: any) {
     if (error.response) {
-      console.error(error.response.status, error.response.data);
       res.status(error.response.status).json(error.response.data);
     } else {
       console.error(`Error with OpenAI API request: ${error.message}`);
