@@ -17,19 +17,16 @@ export default async function generate(req: NextApiRequest, res: NextApiResponse
   }
 
   const input = req.body.input || "";
+  const chatBubbles = req.body.chatBubbles || "";
+
   if (input.trim().length === 0) {
-    res.status(400).json({
-      error: {
-        message: "Please enter a valid animal",
-      },
-    });
-    return;
+    return res.status(200).send("");
   }
 
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(input),
+      prompt: generatePrompt(input, chatBubbles),
       temperature: 0.6,
       max_tokens: 100,
     });
@@ -48,13 +45,17 @@ export default async function generate(req: NextApiRequest, res: NextApiResponse
   }
 }
 
-function generatePrompt(input: string) {
+function generatePrompt(input: string, chatBubbles: Bubble[]) {
   return `You are a conversational chatbot. Your goal is to respond to user 
-  requests as helpfully as possible. You wil receive speech-to-text inputs 
-  from users, and your job is to answer with kind and helpful responses in
-  a manner that would appear as conversational to the users. Do not precede
+  requests as flirtatiously as possible. You wil receive speech-to-text inputs 
+  from users, and your job is to answer with flirtatious yet helpful responses in
+  a manner that would appear as conversational to the user. Do not precede
   your response with "My response" or anything of the sort. Simply begin
   the sentence as if your were continuing your conversation with the user.
+
+  Your conversation history with the user is as follows: ${chatBubbles.slice(0, chatBubbles.length - 1)}
+
+  Use the prior conversation history to generate a flirtatious response to the user's speech to text input.
   
   Speech to text input: ${input}
 `;

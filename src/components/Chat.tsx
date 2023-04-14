@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import mockData from "../mockData.json";
+import initChat from "../initChat.json";
 import styles from "@/styles/Home.module.css";
 import { BiMicrophone } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
@@ -27,23 +28,11 @@ function Chat({ text }: Props) {
   const [animalInput, setAnimalInput] = useState("");
   const [result, setResult] = useState();
   const [prompt, setPrompt] = useState("");
-  // const [chatBubbles, setChatBubbles] = useState<{ sender: "human" | "robot"; text: string }[]>([]);
-  const [chatBubbles, setChatBubbles] = useState<Bubble[]>(mockData);
+  const [chatBubbles, setChatBubbles] = useState<Bubble[]>(initChat);
   const [speechRecognitionState, setSpeechRecognitionState] = useState<SpeechRecognitionState>("inactive");
 
-  useEffect(() => {}, []);
-
   function startChat() {
-    if (speechRecognitionState === "inactive") {
-      setSpeechRecognitionState("listening");
-    }
-    if (speechRecognitionState === "listening") {
-      setSpeechRecognitionState("loading");
-    }
-    if (speechRecognitionState === "loading") {
-      setSpeechRecognitionState("inactive");
-    }
-    return;
+    setSpeechRecognitionState("listening");
     let transcript = "";
     if (!BrowserSpeechRecognition) {
       console.log("Speech Recognition is not supported");
@@ -61,41 +50,35 @@ function Chat({ text }: Props) {
         .map((result) => result.transcript)
         .join("");
 
-      console.log({ transcript });
-      setPrompt(transcript);
-
-      // if (e.results[0].isFinal) {
-      //   sender = !sender;
-      //   const now = new Date();
-
-      //   newUtterance = document.createElement("p");
-      //   newUtterance.classList.add("utterance");
-      //   newUtterance.textContent = "...";
-      //   speech.appendChild(newUtterance);
-
-      //   data.textContent = `${sender ? "Sent" : "Received"} at ${now.getHours()}:${now.getMinutes()}`;
-      //   data = document.createElement("p");
-      //   data.classList.add("data");
-      //   speech.appendChild(data);
-
-      //   speech.scrollTop = speech.scrollHeight;
-      // }
+      setChatBubbles((prev) => {
+        const lastItem = prev[prev.length - 1];
+        if (lastItem.sender === "human") {
+          prev.pop();
+          return [...prev, { sender: "human", text: transcript }];
+        } else {
+          return [...prev, { sender: "human", text: transcript }];
+        }
+      });
     });
 
     recognition.addEventListener("end", () => {
-      getResponse(transcript);
-      console.log("Speech recognition ended");
+      // setChatBubbles((prev) => {
+      //   prev.pop();
+      //   return [...prev, { sender: "human", text: transcript }];
+      // });
+      setSpeechRecognitionState("loading");
+      getResponse(transcript, chatBubbles);
     });
   }
 
-  async function getResponse(input: string) {
+  async function getResponse(input: string, chatBubbles: Bubble[]) {
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input }),
+        body: JSON.stringify({ input, chatBubbles }),
       });
 
       const data = await response.json();
@@ -103,16 +86,18 @@ function Chat({ text }: Props) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      setResult(data.result);
-      setAnimalInput("");
-      setPrompt("");
+      setChatBubbles((prev) => {
+        return [...prev, { sender: "robot", text: data.result }];
+      });
+
+      setSpeechRecognitionState("inactive");
     } catch (error) {
       if (error instanceof Error) {
         console.error(error);
         alert(error.message);
       } else {
         console.error("Unknown error occurred:", error);
-        alert("Unknown error occurred");
+        alert(JSON.stringify(error));
       }
     }
   }
@@ -124,15 +109,13 @@ function Chat({ text }: Props) {
 
   return (
     <section className={styles.chat}>
-      <div className={styles.main}>
-        {chatBubbles.map((bubble, index: number) => {
-          return (
-            <div className={styles.row} key={index}>
-              <p className={bubble.sender === "human" ? styles.human : styles.robot}>{bubble.text}</p>
-            </div>
-          );
-        })}
-      </div>
+      {chatBubbles.map((bubble, index: number) => {
+        return (
+          <div className={styles.row} key={index}>
+            <p className={bubble.sender === "human" ? styles.human : styles.robot}>{bubble.text}</p>
+          </div>
+        );
+      })}
       {/* <form onSubmit={onSubmit}> */}
       {/* <input
           type="text"
