@@ -28,7 +28,7 @@ export default async function generate(req: NextApiRequest, res: NextApiResponse
       model: "text-davinci-003",
       prompt: generatePrompt(input, chatBubbles),
       temperature: 0.6,
-      max_tokens: 100,
+      max_tokens: 1000,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch (error: any) {
@@ -52,6 +52,8 @@ function generatePrompt(input: string, chatBubbles: Bubble[]) {
   a manner that would appear as conversational to the user. Do not precede
   your response with "My response" or anything of the sort. Simply begin
   the sentence as if your were continuing your conversation with the user.
+  Lean towards offering solutions before asking questions. Assume user inputs
+  are questions, regardless of punctuation.
 
   Your conversation history with the user is as follows: ${chatBubbles.slice(0, chatBubbles.length - 1)}
 

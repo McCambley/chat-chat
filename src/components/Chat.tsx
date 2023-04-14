@@ -11,23 +11,14 @@ import { SpeechRecognition } from "web-speech-api";
 
 let BrowserSpeechRecognition: SpeechRecognition;
 
-interface Props {
-  text: string;
-}
-
 type SpeechRecognitionState = "inactive" | "listening" | "loading";
 
 if (typeof window !== "undefined") {
   BrowserSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   console.log(JSON.stringify(BrowserSpeechRecognition)); // window.mozSpeechRecognition ||
-  // window.msSpeechRecognition ||
-  // window.oSpeechRecognition;
 }
 
-function Chat({ text }: Props) {
-  const [animalInput, setAnimalInput] = useState("");
-  const [result, setResult] = useState();
-  const [prompt, setPrompt] = useState("");
+function Chat() {
   const [chatBubbles, setChatBubbles] = useState<Bubble[]>(initChat);
   const [speechRecognitionState, setSpeechRecognitionState] = useState<SpeechRecognitionState>("inactive");
 
@@ -62,16 +53,15 @@ function Chat({ text }: Props) {
     });
 
     recognition.addEventListener("end", () => {
-      // setChatBubbles((prev) => {
-      //   prev.pop();
-      //   return [...prev, { sender: "human", text: transcript }];
-      // });
       setSpeechRecognitionState("loading");
       getResponse(transcript, chatBubbles);
     });
   }
 
   async function getResponse(input: string, chatBubbles: Bubble[]) {
+    if (!input) {
+      return setSpeechRecognitionState("inactive");
+    }
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -102,11 +92,6 @@ function Chat({ text }: Props) {
     }
   }
 
-  // async function onSubmit(event: Event) {
-  //   event.preventDefault();
-  //   getResponse();
-  // }
-
   return (
     <section className={styles.chat}>
       {chatBubbles.map((bubble, index: number) => {
@@ -116,17 +101,6 @@ function Chat({ text }: Props) {
           </div>
         );
       })}
-      {/* <form onSubmit={onSubmit}> */}
-      {/* <input
-          type="text"
-          name="chat"
-          placeholder="What's on your mind?"
-          value={animalInput}
-          onChange={(e) => setAnimalInput(e.target.value)}
-        /> */}
-      {/* <input type="submit" value="SUBMIT FORM" /> */}
-      {/* <p>{result}</p> */}
-      {/* </form> */}
       <div className={styles.footer}>
         <button className={styles.footer_button} onClick={startChat}>
           {speechRecognitionState === "inactive" && <BiMicrophone />}
