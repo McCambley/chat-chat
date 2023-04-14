@@ -15,7 +15,6 @@ type SpeechRecognitionState = "inactive" | "listening" | "loading";
 
 if (typeof window !== "undefined") {
   BrowserSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  console.log(JSON.stringify(BrowserSpeechRecognition)); // window.mozSpeechRecognition ||
 }
 
 function Chat() {
@@ -30,7 +29,6 @@ function Chat() {
       return;
     }
 
-    console.log("");
     const recognition = new BrowserSpeechRecognition();
     recognition.interimResults = true;
     recognition.start();
