@@ -155,7 +155,7 @@
 .chat {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1rem 0rem;
   padding-bottom: 4rem;
   position: relative;
   overflow: scroll;

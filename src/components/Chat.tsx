@@ -2,33 +2,44 @@ import React, { useEffect, useState } from "react";
 import mockData from "../mockData.json";
 import styles from "@/styles/Home.module.css";
 import { BiMicrophone } from "react-icons/bi";
+// @ts-ignore
+import { SpeechRecognition } from "web-speech-api";
 
-if (typeof window !== "undefined" && "SpeechRecognition" in window) {
-  window.SpeechRecognition = window.SpeechRecognition;
+let BrowserSpeechRecognition: SpeechRecognition;
+
+interface Props {
+  text: string;
 }
 
-function Chat({ text }) {
+if (typeof window !== "undefined") {
+  BrowserSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  console.log(JSON.stringify(BrowserSpeechRecognition)); // window.mozSpeechRecognition ||
+  // window.msSpeechRecognition ||
+  // window.oSpeechRecognition;
+}
+
+function Chat({ text }: Props) {
   const [animalInput, setAnimalInput] = useState("");
   const [result, setResult] = useState();
   const [prompt, setPrompt] = useState("");
   // const [chatBubbles, setChatBubbles] = useState<{ sender: "human" | "robot"; text: string }[]>([]);
-  const [chatBubbles, setChatBubbles] = useState<any>(mockData);
+  const [chatBubbles, setChatBubbles] = useState<Bubble[]>(mockData);
 
   useEffect(() => {}, []);
 
   function startChat() {
     let transcript = "";
-    if (!SpeechRecognition) {
+    if (!BrowserSpeechRecognition) {
       console.log("Speech Recognition is not supported");
       return;
     }
 
     console.log("");
-    const recognition = new SpeechRecognition();
+    const recognition = new BrowserSpeechRecognition();
     recognition.interimResults = true;
     recognition.start();
 
-    recognition.addEventListener("result", (e) => {
+    recognition.addEventListener("result", (e: SpeechRecognitionEvent) => {
       transcript = Array.from(e.results)
         .map((result) => result[0])
         .map((result) => result.transcript)
@@ -61,7 +72,7 @@ function Chat({ text }) {
     });
   }
 
-  async function getResponse(input) {
+  async function getResponse(input: string) {
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -80,21 +91,25 @@ function Chat({ text }) {
       setAnimalInput("");
       setPrompt("");
     } catch (error) {
-      // Consider implementing your own error handling logic here
-      console.error(error);
-      alert(error.message);
+      if (error instanceof Error) {
+        console.error(error);
+        alert(error.message);
+      } else {
+        console.error("Unknown error occurred:", error);
+        alert("Unknown error occurred");
+      }
     }
   }
 
-  async function onSubmit(event) {
-    event.preventDefault();
-    getResponse();
-  }
+  // async function onSubmit(event: Event) {
+  //   event.preventDefault();
+  //   getResponse();
+  // }
 
   return (
     <section className={styles.chat}>
       <div className={styles.main}>
-        {chatBubbles.map((bubble, index) => {
+        {chatBubbles.map((bubble, index: number) => {
           return (
             <div className={styles.row} key={index}>
               <p className={bubble.sender === "human" ? styles.human : styles.robot}>{bubble.text}</p>
@@ -102,17 +117,17 @@ function Chat({ text }) {
           );
         })}
       </div>
-      <form onSubmit={onSubmit}>
-        {/* <input
+      {/* <form onSubmit={onSubmit}> */}
+      {/* <input
           type="text"
           name="chat"
           placeholder="What's on your mind?"
           value={animalInput}
           onChange={(e) => setAnimalInput(e.target.value)}
         /> */}
-        {/* <input type="submit" value="SUBMIT FORM" /> */}
-        {/* <p>{result}</p> */}
-      </form>
+      {/* <input type="submit" value="SUBMIT FORM" /> */}
+      {/* <p>{result}</p> */}
+      {/* </form> */}
       <div className={styles.footer}>
         <button className={styles.footer_button} onClick={startChat}>
           <BiMicrophone />
