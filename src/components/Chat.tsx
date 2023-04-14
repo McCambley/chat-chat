@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import mockData from "../mockData.json";
 import styles from "@/styles/Home.module.css";
 import { BiMicrophone } from "react-icons/bi";
+import { GoPrimitiveDot } from "react-icons/go";
+import { RiLoader5Fill } from "react-icons/ri";
+
 // @ts-ignore
 import { SpeechRecognition } from "web-speech-api";
 
@@ -10,6 +13,8 @@ let BrowserSpeechRecognition: SpeechRecognition;
 interface Props {
   text: string;
 }
+
+type SpeechRecognitionState = "inactive" | "listening" | "loading";
 
 if (typeof window !== "undefined") {
   BrowserSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -24,6 +29,7 @@ function Chat({ text }: Props) {
   const [prompt, setPrompt] = useState("");
   // const [chatBubbles, setChatBubbles] = useState<{ sender: "human" | "robot"; text: string }[]>([]);
   const [chatBubbles, setChatBubbles] = useState<Bubble[]>(mockData);
+  const [speechRecognitionState, setSpeechRecognitionState] = useState<SpeechRecognitionState>("inactive");
 
   useEffect(() => {}, []);
 
@@ -130,7 +136,9 @@ function Chat({ text }: Props) {
       {/* </form> */}
       <div className={styles.footer}>
         <button className={styles.footer_button} onClick={startChat}>
-          <BiMicrophone />
+          {speechRecognitionState === "inactive" && <BiMicrophone />}
+          {speechRecognitionState === "listening" && <GoPrimitiveDot className={styles.dot} />}
+          {speechRecognitionState === "loading" && <RiLoader5Fill className={styles.loader} />}{" "}
         </button>
       </div>
     </section>
