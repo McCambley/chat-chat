@@ -34,6 +34,16 @@ function Chat({ text }: Props) {
   useEffect(() => {}, []);
 
   function startChat() {
+    if (speechRecognitionState === "inactive") {
+      setSpeechRecognitionState("listening");
+    }
+    if (speechRecognitionState === "listening") {
+      setSpeechRecognitionState("loading");
+    }
+    if (speechRecognitionState === "loading") {
+      setSpeechRecognitionState("inactive");
+    }
+    return;
     let transcript = "";
     if (!BrowserSpeechRecognition) {
       console.log("Speech Recognition is not supported");

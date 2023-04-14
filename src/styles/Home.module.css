@@ -2,20 +2,16 @@
 
 @keyframes fade-in {
   0% {
-    opacity: .1;
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  50% {
+    opacity: .5;
     transform: scale(1);
-  }
-  40% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.2);
   }
   100% {
-    opacity: .1;
-    transform: scale(1);
+    opacity: 1;
+    transform: scale(1.);
   }
 }
 
@@ -262,6 +258,7 @@
 }
 
 .dot {
+  color: maroon;
   animation: fade-in 2.5s infinite;
 }
 
