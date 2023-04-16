@@ -5,6 +5,7 @@ import styles from "@/styles/Home.module.css";
 import { BiMicrophone } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { RiLoader5Fill } from "react-icons/ri";
+import transformPunctuation from "@/utils/transformPunctuation";
 
 // @ts-ignore
 import { SpeechRecognition } from "web-speech-api";
@@ -66,7 +67,7 @@ function Chat() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input, chatBubbles }),
+        body: JSON.stringify({ input: transformPunctuation(input), chatBubbles }),
       });
 
       const data = await response.json();
