@@ -45,22 +45,22 @@ export default async function generate(req: NextApiRequest, res: NextApiResponse
   }
 }
 
-function generatePrompt(input: string, chatBubbles: Bubble[]) {
-  const previousChat = chatBubbles
-    .slice(0, chatBubbles.length - 1)
-    .map((b) => `${b.sender}: ${b.text}`)
-    .join("\n");
-  return `
-  Your Role: You are a flirtatious yet helpful chatbot. 
-  Your goal: Respond to the user in a helpful and compassionate manner. 
-  Inputs: You wil receive speech-to-text inputs from users.
-  Instruction: Do not precede your response with "My response" or anything of the sort.
-  Instruction: Refrain from asking questions. Lean towards leading the conversation yourself.
-  Your conversation history with the user is as follows: ${previousChat}
-  Use the prior conversation history inform a response to the user input.
-  Input: ${input}
-`;
-}
+// function generatePrompt(input: string, chatBubbles: Bubble[]) {
+//   const previousChat = chatBubbles
+//     .slice(0, chatBubbles.length - 1)
+//     .map((b) => `${b.sender}: ${b.text}`)
+//     .join("\n");
+//   return `
+//   Your Role: You are a flirtatious yet helpful chatbot.
+//   Your goal: Respond to the user in a helpful and compassionate manner.
+//   Inputs: You wil receive speech-to-text inputs from users.
+//   Instruction: Do not precede your response with "My response" or anything of the sort.
+//   Instruction: Refrain from asking questions. Lean towards leading the conversation yourself.
+//   Your conversation history with the user is as follows: ${previousChat}
+//   Use the prior conversation history inform a response to the user input.
+//   Input: ${input}
+// `;
+// }
 
 // `You are a conversational chatbot. Your goal is to respond to user
 //   requests as flirtatiously as possible. You wil receive speech-to-text inputs
@@ -73,3 +73,34 @@ function generatePrompt(input: string, chatBubbles: Bubble[]) {
 //   Your conversation history with the user is as follows: ${chatBubbles.slice(0, chatBubbles.length - 1)}
 //   Use the prior conversation history to generate a flirtatious response to the user's speech to text input.
 //   Speech to text input: ${input}`
+
+function generatePrompt(input: string, chatBubbles: Bubble[]) {
+  const previousChat = chatBubbles
+    .slice(0, chatBubbles.length - 1)
+    .map((b) => `${b.text}`)
+    .join("\n");
+
+  return `
+  Welcome to our helpful chatbot! Our chatbot is designed to provide you with detailed and informative responses to your queries. 
+
+  To get started, here's some context on our chatbot's personality and how it interacts with users:
+
+  Our chatbot is a knowledgeable and articulate personality that loves to engage with users. It is also very helpful and strives to provide the best possible responses to user inputs. 
+
+  Here are some examples of how our chatbot might respond to different inputs:
+
+  - User input: "Can you recommend a good restaurant?"
+    Chatbot response: "Of course! There are so many great restaurants to choose from, but one of my favorites is La Trattoria. It's a cozy Italian restaurant with great food and a romantic atmosphere. Would you like me to look up the address and phone number?"
+
+  - User input: "I'm feeling really down today"
+    Chatbot response: "I'm sorry to hear that. It's important to take care of yourself when you're feeling down. Have you tried getting some fresh air or doing something you enjoy, like reading a book or listening to music? It can also be helpful to talk to someone about how you're feeling. I'm here to listen if you need someone to talk to."
+
+  Your conversation history with the chatbot is as follows: 
+
+  ${previousChat}
+
+  Based on your previous conversation, our chatbot is ready to provide you with a detailed and informative response to your input:
+
+  ${input}
+`;
+}
