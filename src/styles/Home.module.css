@@ -194,17 +194,18 @@
 .row {
   width: 100%;
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 
 }
 
 .bubble {
-  padding: .5rem 1rem;
-  border: 1px solid var(--lightest);
+  padding: .75rem 1rem;
   border-radius: 1.15rem;
   max-width: 75%;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 600;
+  line-height: 1.25;
+  box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, .1);
 }
 
 .bubble::first-letter {
@@ -217,8 +218,9 @@
   margin-left: auto;
   text-align: right;
   color: var(--darkest);
-  background-color: var(--lightest);
+  background-color: var(--light);
   border-color: var(--lightest);
+  /* border: 1px solid var(--light); */
 }
 
 .robot {
@@ -226,6 +228,9 @@
   margin-left: .25rem;
   margin-right: auto;
   text-align: left;
+  background-color: var(--darkest);
+  color: var(--light);
+  /* border: 1px solid var(--neutral); */
 }
 
 .footer {
