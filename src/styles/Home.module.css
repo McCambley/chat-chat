@@ -207,6 +207,7 @@
   font-weight: 600;
   line-height: 1.25;
   box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, .1);
+  white-space: pre-line;
 }
 
 .bubble::first-letter {

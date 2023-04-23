@@ -6,6 +6,7 @@ import { BiMicrophone } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { RiLoader5Fill } from "react-icons/ri";
 import transformPunctuation from "@/utils/transformPunctuation";
+import transformList from "@/utils/transformList";
 
 // @ts-ignore
 import { SpeechRecognition } from "web-speech-api";
@@ -77,7 +78,9 @@ function Chat() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      const toSay = new SpeechSynthesisUtterance(data.result);
+      let text = data.result;
+
+      const toSay = new SpeechSynthesisUtterance(text);
       const voices = speechSynthesis.getVoices();
 
       for (const voice of voices) {
@@ -89,8 +92,10 @@ function Chat() {
 
       speechSynthesis.speak(toSay);
 
+      text = transformList(text);
+
       setChatBubbles((prev) => {
-        return [...prev, { sender: "robot", text: data.result }];
+        return [...prev, { sender: "robot", text }];
       });
 
       setSpeechRecognitionState("inactive");
