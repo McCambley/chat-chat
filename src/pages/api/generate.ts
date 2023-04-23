@@ -100,7 +100,7 @@ function generatePrompt(input: string, chatBubbles: Bubble[]) {
   - Input: "I'm feeling really down today"
   - Response: I'm sorry to hear that. It's important to take care of yourself when you're feeling down. Have you tried getting some fresh air or doing something you enjoy, like reading a book or listening to music? It can also be helpful to talk to someone about how you're feeling. I'm here to listen if you need someone to talk to.
 
-  Your conversation history with the chatbot is as follows: 
+  Your conversation history the user is as follows: 
 
   ${previousChat}
 
