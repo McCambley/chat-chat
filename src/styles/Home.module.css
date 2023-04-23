@@ -207,6 +207,10 @@
   font-weight: 600;
 }
 
+.bubble::first-letter {
+  text-transform: uppercase;
+}
+
 .human {
   composes: bubble;
   margin-right: .25rem;
