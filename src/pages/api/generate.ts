@@ -77,8 +77,16 @@ export default async function generate(req: NextApiRequest, res: NextApiResponse
 function generatePrompt(input: string, chatBubbles: Bubble[]) {
   const previousChat = chatBubbles
     .slice(0, chatBubbles.length - 1)
-    .map((b) => `${b.text}`)
-    .join("\n");
+    .map((b) => {
+      if (b.sender === "human") {
+        return `The user said "${b.text}"`;
+      } else {
+        return `Then the chatbot responded "${b.text}"`;
+      }
+    })
+    .join(", ");
+
+  console.log(previousChat);
 
   return `
   Welcome to our helpful chatbot! Our chatbot is designed to provide you with detailed and informative responses to your queries. 
@@ -101,6 +109,6 @@ function generatePrompt(input: string, chatBubbles: Bubble[]) {
 
   Based on your previous conversation, our chatbot is ready to provide you with a detailed and informative response to your input:
 
-  ${input}
+  Input: ${input}
 `;
 }

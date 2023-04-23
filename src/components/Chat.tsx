@@ -19,6 +19,7 @@ if (typeof window !== "undefined") {
 }
 
 function Chat() {
+  // @ts-ignore
   const [chatBubbles, setChatBubbles] = useState<Bubble[]>(initChat);
   const [speechRecognitionState, setSpeechRecognitionState] = useState<SpeechRecognitionState>("inactive");
 

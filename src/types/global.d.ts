@@ -1,4 +1,4 @@
 interface Bubble {
-  sender: string;
+  sender: "robot" | "human";
   text: string;
 }
