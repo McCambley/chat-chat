@@ -52,6 +52,7 @@ function Chat() {
     });
 
     recognition.addEventListener("end", () => {
+      speechSynthesis.cancel();
       setSpeechRecognitionState("loading");
       getResponse(transcript, chatBubbles);
     });
@@ -74,6 +75,18 @@ function Chat() {
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
+
+      const toSay = new SpeechSynthesisUtterance(data.result);
+      const voices = speechSynthesis.getVoices();
+
+      for (const voice of voices) {
+        if (voice.name === "Google UK English Male" || voice.voiceURI === "Google UK English Male") {
+          toSay.voice = voice;
+          toSay.rate = 1.2;
+        }
+      }
+
+      speechSynthesis.speak(toSay);
 
       setChatBubbles((prev) => {
         return [...prev, { sender: "robot", text: data.result }];
