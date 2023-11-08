@@ -33,6 +33,7 @@ export default async function generate(req: NextApiRequest, res: NextApiResponse
       temperature: 0.6,
       max_tokens: 1000,
       // messages: [{ role: "system", content: "You are a helpful assistant." }],
+      // @ts-ignore
       messages: generatePrompt(input, chatBubbles),
       model: "gpt-3.5-turbo",
     });
