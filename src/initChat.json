@@ -1,7 +1,6 @@
 [
-    {
-      "sender": "robot",
-      "text": "Hey! What can I do for you today?"
-    }
-  ]
-  
+  {
+    "role": "assistant",
+    "content": "Hey! What can I do for you today?"
+  }
+]

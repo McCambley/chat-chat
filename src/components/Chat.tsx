@@ -44,11 +44,11 @@ function Chat() {
 
       setChatBubbles((prev) => {
         const lastItem = prev[prev.length - 1];
-        if (lastItem.sender === "human") {
+        if (lastItem.role === "user") {
           prev.pop();
-          return [...prev, { sender: "human", text: transcript }];
+          return [...prev, { role: "user", content: transcript }];
         } else {
-          return [...prev, { sender: "human", text: transcript }];
+          return [...prev, { role: "user", content: transcript }];
         }
       });
     });
@@ -78,7 +78,8 @@ function Chat() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      let text = data.result;
+      let text = data.result.message.content;
+      console.log(text);
 
       const toSay = new SpeechSynthesisUtterance(text);
       const voices = speechSynthesis.getVoices();
@@ -95,7 +96,7 @@ function Chat() {
       text = transformList(text);
 
       setChatBubbles((prev) => {
-        return [...prev, { sender: "robot", text }];
+        return [...prev, { role: "assistant", content: text }];
       });
 
       setSpeechRecognitionState("inactive");
@@ -115,7 +116,7 @@ function Chat() {
       {chatBubbles.map((bubble, index: number) => {
         return (
           <div className={styles.row} key={index}>
-            <p className={bubble.sender === "human" ? styles.human : styles.robot}>{bubble.text}</p>
+            <p className={bubble.role === "user" ? styles.human : styles.robot}>{bubble.content}</p>
           </div>
         );
       })}

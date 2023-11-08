@@ -1,4 +1,4 @@
 interface Bubble {
-  sender: "robot" | "human";
-  text: string;
+  role: "system" | "user" | "assistant";
+  content: string;
 }
